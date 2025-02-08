@@ -62,14 +62,13 @@ docker-build: vendor
 
 docker-run: docker-build
 	@echo "Running docker image..."
-	@if [ ! -f .env ]; then echo "Run 'make copy_env' to create .env file and execute this command again" && exit 1; fi
-	@docker compose -f compose.yaml up
+	@docker compose -f ./deployments/compose/compose.yaml up
 	@echo "Done"
 .PHONY: docker-run
 
 docker-stop:
 	@echo "Stopping docker image..."
-	@docker compose -f compose.yaml down
+	@docker compose -f ./deployments/compose/compose.yaml down
 	@echo "Done"
 .PHONY: docker-stop
 
