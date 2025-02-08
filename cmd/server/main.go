@@ -69,7 +69,7 @@ func main() {
 
 	defer cancel(nil)
 
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGKILL, syscall.SIGTERM)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
 		s := <-signals
