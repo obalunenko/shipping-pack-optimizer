@@ -1,6 +1,9 @@
 APP_NAME?=server
 SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
 
+IMAGE_NAME?=shipping-pack-optimizer-$(APP_NAME)
+SHELL := env IMAGE_NAME=$(IMAGE_NAME) $(SHELL)
+
 BIN_DIR?=$(CURDIR)/bin
 
 GOVERSION:=1.23
@@ -53,7 +56,7 @@ vendor:
 
 docker-build: vendor
 	@echo "Building docker image..."
-	@docker build -t $(APP_NAME):latest -f Dockerfile .
+	@IMAGE_DESCRIPTION="$$(cat README.md)" docker buildx bake
 	@echo "Done"
 .PHONY: docker-build
 

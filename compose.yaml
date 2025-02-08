@@ -1,6 +1,7 @@
 services:
   server:
-    image: ${APP_NAME}:latest
+    image: ${IMAGE_NAME}:latest
+    container_name: "server"
     env_file:
       - .env
     ports:
