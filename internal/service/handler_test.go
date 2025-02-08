@@ -8,7 +8,7 @@ import (
 
 func Test_toAPIResponse(t *testing.T) {
 	type args struct {
-		boxes []uint
+		boxes map[uint]uint
 	}
 	tests := []struct {
 		name string
@@ -18,7 +18,9 @@ func Test_toAPIResponse(t *testing.T) {
 		{
 			name: "[500, 500, 500]",
 			args: args{
-				boxes: []uint{500, 500, 500},
+				boxes: map[uint]uint{
+					500: 3,
+				},
 			},
 			want: PackResponse{
 				Packs: []Pack{
@@ -32,7 +34,10 @@ func Test_toAPIResponse(t *testing.T) {
 		{
 			name: "[500, 2000, 500]",
 			args: args{
-				boxes: []uint{500, 2000, 500},
+				boxes: map[uint]uint{
+					500:  2,
+					2000: 1,
+				},
 			},
 			want: PackResponse{
 				Packs: []Pack{
