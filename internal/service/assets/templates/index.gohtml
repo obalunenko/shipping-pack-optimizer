@@ -44,7 +44,10 @@
             createResetButton(resultsDiv); // Creates the 'Pack new order' button
         } else {
             console.error('HTTP-Error: ' + response.status);
-            resultsDiv.innerHTML = '<p>Unable to process the request.</p>';
+            let packPara = document.createElement('p');
+            packPara.textContent = 'Unable to process the request.';
+            resultsDiv.appendChild(packPara);
+            createResetButton(resultsDiv);
         }
 
         function displayResults(result, resultsDiv) {

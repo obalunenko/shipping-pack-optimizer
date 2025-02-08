@@ -3,7 +3,7 @@ SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
 
 BIN_DIR?=$(CURDIR)/bin
 
-GOVERSION:=1.22
+GOVERSION:=1.23
 
 TEST_DISCARD_LOG?=false
 SHELL := env TEST_DISCARD_LOG=$(TEST_DISCARD_LOG) $(SHELL)
@@ -33,13 +33,13 @@ test:
 	@echo "Done"
 .PHONY: test
 
-build: swagger-gen
+build:
 	@echo "Building..."
 	@./scripts/build/app.sh
 	@echo "Done"
 .PHONY: build
 
-run:
+run: vendor build
 	@echo "Running..."
 	@${BIN_DIR}/$(APP_NAME)
 	@echo "Done"
@@ -51,7 +51,7 @@ vendor:
 	@echo "Done"
 .PHONY: vendor
 
-docker-build:
+docker-build: vendor
 	@echo "Building docker image..."
 	@docker build -t $(APP_NAME):latest -f Dockerfile .
 	@echo "Done"
@@ -59,6 +59,7 @@ docker-build:
 
 docker-run: docker-build
 	@echo "Running docker image..."
+	@if [ ! -f .env ]; then echo "Run 'make copy_env' to create .env file and execute this command again" && exit 1; fi
 	@docker compose -f compose.yaml up
 	@echo "Done"
 .PHONY: docker-run
@@ -103,4 +104,12 @@ swagger-gen:
 swagger-fmt:
 	./scripts/style/swagger-fmt.sh
 .PHONY: swagger-fmt
+
+## Copy .env file from .env.example
+copy_env:
+	@cp .env.example .env
+.PHONY: copy_env
+
+
+
 

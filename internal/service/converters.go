@@ -1,6 +1,9 @@
 package service
 
-import "sort"
+import (
+	"maps"
+	"sort"
+)
 
 func fromAPIRequest(req PackRequest) (uint, error) {
 	if req.Items == 0 {
@@ -10,15 +13,10 @@ func fromAPIRequest(req PackRequest) (uint, error) {
 	return req.Items, nil
 }
 
-func toAPIResponse(boxes []uint) PackResponse {
+func toAPIResponse(boxes map[uint]uint) PackResponse {
 	var resp PackResponse
 
-	orderMap := make(map[uint]uint)
-	for i := range boxes {
-		orderMap[boxes[i]]++
-	}
-
-	for k, v := range orderMap {
+	for k, v := range maps.All(boxes) {
 		resp.Packs = append(resp.Packs, Pack{
 			Box:      k,
 			Quantity: v,

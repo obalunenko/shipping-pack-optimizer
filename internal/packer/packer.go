@@ -20,9 +20,9 @@ var DefaultBoxes = []uint{
 	5000,
 }
 
-type PackerOption func(*Packer)
+type Option func(*Packer)
 
-func WithBoxes(boxes []uint) PackerOption {
+func WithBoxes(boxes []uint) Option {
 	return func(p *Packer) {
 		slices.Sort(boxes)
 
@@ -50,17 +50,17 @@ func WithBoxes(boxes []uint) PackerOption {
 	}
 }
 
-func WithDefaultBoxes() PackerOption {
+func WithDefaultBoxes() Option {
 	return func(p *Packer) {
 		p.boxes = DefaultBoxes
 	}
 }
 
-func NewPacker(ctx context.Context, opts ...PackerOption) (*Packer, error) {
+func NewPacker(ctx context.Context, opts ...Option) (*Packer, error) {
 	var p Packer
 
 	if len(opts) == 0 {
-		opts = []PackerOption{WithDefaultBoxes()}
+		opts = []Option{WithDefaultBoxes()}
 	}
 
 	for _, opt := range opts {
@@ -92,14 +92,14 @@ func (p Packer) validate() error {
 
 }
 
-func (p Packer) PackOrder(ctx context.Context, items uint) []uint {
+func (p Packer) PackOrder(ctx context.Context, items uint) map[uint]uint {
 	log.WithFields(ctx, log.Fields{
 		"items": items,
 		"boxes": p.boxes,
 	}).Debug("Packing order")
 
 	if items == 0 {
-		return []uint{}
+		return nil
 	}
 
 	if p.boxes[0] == 0 {
@@ -109,13 +109,15 @@ func (p Packer) PackOrder(ctx context.Context, items uint) []uint {
 
 	// Preallocate memory for the result slice.
 	// Make a prediction based on the number of items and the smallest box.
-	result := make([]uint, 0, items/p.boxes[0])
+	result := make(map[uint]uint, len(p.boxes))
 
 	if len(p.boxes) == 1 {
 		box := p.boxes[0]
 
 		if items < box {
-			return []uint{box}
+			result[box]++
+
+			return result
 		}
 
 		n := items / box
@@ -125,9 +127,7 @@ func (p Packer) PackOrder(ctx context.Context, items uint) []uint {
 			n++
 		}
 
-		for i := uint(0); i < n; i++ {
-			result = append(result, box)
-		}
+		result[box] += n
 
 		return result
 	}
@@ -137,7 +137,7 @@ func (p Packer) PackOrder(ctx context.Context, items uint) []uint {
 
 		if box >= items {
 			if i == 0 {
-				result = append(result, box)
+				result[box]++
 
 				break
 			}
@@ -147,7 +147,7 @@ func (p Packer) PackOrder(ctx context.Context, items uint) []uint {
 
 		if box < items {
 			if i == 0 {
-				result = append(result, p.boxes[i+1])
+				result[p.boxes[i+1]]++
 
 				break
 			}
@@ -155,14 +155,12 @@ func (p Packer) PackOrder(ctx context.Context, items uint) []uint {
 			n := items / box
 
 			if n == 0 {
-				result = append(result, box)
+				result[box]++
 
 				break
 			}
 
-			for j := uint(0); j < n; j++ {
-				result = append(result, box)
-			}
+			result[box] += n
 
 			left := items % box
 

@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -69,7 +68,7 @@ func requestIDMiddleware(next http.Handler) http.Handler {
 
 		ctx = context.WithValue(ctx, requestIDKey{}, rid)
 
-		l := log.FromContext(r.Context())
+		l := log.FromContext(ctx)
 		l = l.WithField("request_id", rid)
 
 		ctx = log.ContextWithLogger(r.Context(), l)
@@ -110,7 +109,9 @@ func recoverMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				log.WithError(r.Context(), fmt.Errorf(fmt.Sprint(err))).Error("Panic recovered")
+				log.WithField(r.Context(), "error", err).Error("Panic recovered")
+
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}
 		}()
 

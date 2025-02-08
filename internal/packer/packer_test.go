@@ -26,7 +26,7 @@ func TestPacker_PackOrder(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   []uint
+		want   map[uint]uint
 	}{
 		{
 			name: "default. 1 - 1x250",
@@ -36,7 +36,9 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 1,
 			},
-			want: []uint{250},
+			want: map[uint]uint{
+				250: 1,
+			},
 		},
 		{
 			name: "default. 251 - 1x500",
@@ -46,7 +48,9 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 251,
 			},
-			want: []uint{500},
+			want: map[uint]uint{
+				500: 1,
+			},
 		},
 		{
 			name: "default. 501 - 1x500, 1x250",
@@ -56,7 +60,10 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 501,
 			},
-			want: []uint{500, 250},
+			want: map[uint]uint{
+				500: 1,
+				250: 1,
+			},
 		},
 		{
 			name: "default. 12001  - 2x5000, 1x2000, 1x250",
@@ -66,8 +73,27 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 12001,
 			},
-			want: []uint{5000, 5000, 2000, 250},
+			want: map[uint]uint{
+				5000: 2,
+				2000: 1,
+				250:  1,
+			},
 		},
+		{
+			name: "default. 29292929292929  - ?",
+			fields: fields{
+				boxes: DefaultBoxes,
+			},
+			args: args{
+				items: 29292929292929,
+			},
+			want: map[uint]uint{
+				5000: 5858585858,
+				2000: 1,
+				500:  2,
+			},
+		},
+
 		{
 			name: "custom[1, 2, 4, 8]. 1 - 1",
 			fields: fields{
@@ -76,7 +102,9 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 1,
 			},
-			want: []uint{1},
+			want: map[uint]uint{
+				1: 1,
+			},
 		},
 
 		{
@@ -87,7 +115,9 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 7,
 			},
-			want: []uint{3, 3, 3},
+			want: map[uint]uint{
+				3: 3,
+			},
 		},
 
 		{
@@ -98,7 +128,11 @@ func TestPacker_PackOrder(t *testing.T) {
 			args: args{
 				items: 7,
 			},
-			want: []uint{4, 2, 1},
+			want: map[uint]uint{
+				4: 1,
+				2: 1,
+				1: 1,
+			},
 		},
 	}
 
@@ -109,12 +143,12 @@ func TestPacker_PackOrder(t *testing.T) {
 
 			got := p.PackOrder(ctx, tt.args.items)
 
-			compareSlices(t, tt.want, got)
+			compareMaps(t, tt.want, got)
 		})
 	}
 }
 
-func compareSlices(t *testing.T, expected, actual []uint) {
+func compareMaps(t *testing.T, expected, actual map[uint]uint) {
 	bexp, err := json.Marshal(expected)
 	require.NoError(t, err)
 
@@ -128,7 +162,7 @@ func TestNewPacker(t *testing.T) {
 	ctx := testlogger.New(context.Background())
 
 	type args struct {
-		opts []PackerOption
+		opts []Option
 	}
 
 	tests := []struct {
@@ -140,7 +174,7 @@ func TestNewPacker(t *testing.T) {
 		{
 			name: "default boxes",
 			args: args{
-				opts: []PackerOption{},
+				opts: []Option{},
 			},
 			want: &Packer{
 				boxes: DefaultBoxes,
@@ -150,7 +184,7 @@ func TestNewPacker(t *testing.T) {
 		{
 			name: "custom boxes",
 			args: args{
-				opts: []PackerOption{
+				opts: []Option{
 					WithBoxes([]uint{32, 1, 2, 2, 4, 16, 8, 16}),
 				},
 			},
@@ -162,7 +196,7 @@ func TestNewPacker(t *testing.T) {
 		{
 			name: "custom boxes empty - error",
 			args: args{
-				opts: []PackerOption{
+				opts: []Option{
 					WithBoxes([]uint{}),
 				},
 			},
@@ -172,7 +206,7 @@ func TestNewPacker(t *testing.T) {
 		{
 			name: "custom boxes contains zero - error",
 			args: args{
-				opts: []PackerOption{
+				opts: []Option{
 					WithBoxes([]uint{9, 0, 2}),
 				},
 			},

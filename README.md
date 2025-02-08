@@ -68,22 +68,22 @@ Application follows the [12-factor app](https://12factor.net/) methodology and c
 
 Following environment variables are supported:
 
-| Name         | Description                                                          | Default value             |
-|--------------|----------------------------------------------------------------------|---------------------------|
-| `PORT`       | The port on which the application will listen for incoming requests. | `8080`                    |
-| `HOST`       | The host on which the application will listen for incoming requests. | `0.0.0.0`                 |
-| `LOG_LEVEL`  | The log level of the application.                                    | `info`                    |
-| `LOG_FORMAT` | The log format of the application.                                   | `text`                    |
-| `PACK_BOXES` | The pack boxes for packing orders. Values should be separated by `,` | `250,500,1000,2000,5000,` |
+| Name         | Description                                                          | Default value            |
+|--------------|----------------------------------------------------------------------|--------------------------|
+| `PORT`       | The port on which the application will listen for incoming requests. | `8080`                   |
+| `HOST`       | The host on which the application will listen for incoming requests. | `0.0.0.0`                |
+| `LOG_LEVEL`  | The log level of the application.                                    | `info`                   |
+| `LOG_FORMAT` | The log format of the application.                                   | `text`                   |
+| `PACK_BOXES` | The pack boxes for packing orders. Values should be separated by `,` | `250,500,1000,2000,5000` |
 
 
 ## Development
 
 ### Prerequisites
 
-- [Go](https://golang.org/doc/install) 1.22 or higher
-- [Docker](https://docs.docker.com/get-docker/) 24.0 or higher
-- [Docker Compose](https://docs.docker.com/compose/install/) 2.21 or higher
+- [Go](https://golang.org/doc/install) 1.23 or higher
+- [Docker](https://docs.docker.com/get-docker/) 27.0 or higher
+- [Docker Compose](https://docs.docker.com/compose/install/) 2.31 or higher
 
 ### Running the application
 
@@ -93,7 +93,7 @@ For development purposes, the application can be run locally using the following
 make build && make run
 ```
 
-To run the application in a Docker container, use the following command:
+To build and run the application in a Docker container, use the following command:
 
 ```bash
 make docker-build && make docker-run
@@ -110,7 +110,7 @@ make test
 To run tests without logs, use the following command:
 
 ```bash
-make TEST_DISCARD_LOG=true test
+TEST_DISCARD_LOG=true make test
 ```
 
 ### Linting
