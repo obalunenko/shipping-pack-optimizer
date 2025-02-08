@@ -1,4 +1,4 @@
-FROM golang:1.23.5-alpine3.21 AS build
+FROM golang:1.23.6-alpine3.21 AS build
 WORKDIR /src
 
 ARG APK_BASH_VERSION=~5
