@@ -1,14 +1,14 @@
 module github.com/obalunenko/shipping-pack-optimizer
 
-go 1.22
+go 1.23
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/obalunenko/getenv v1.13.0
-	github.com/obalunenko/logger v1.1.0
+	github.com/obalunenko/getenv v1.14.0
+	github.com/obalunenko/logger v1.2.0
 	github.com/obalunenko/version v1.2.0
-	github.com/stretchr/testify v1.9.0
-	github.com/swaggo/swag v1.16.3
+	github.com/stretchr/testify v1.10.0
+	github.com/swaggo/swag v1.16.4
 )
 
 require (
@@ -19,9 +19,9 @@ require (
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/exp v0.0.0-20240213143201-ec583247a57a // indirect
-	golang.org/x/tools v0.21.0 // indirect
+	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c // indirect
+	golang.org/x/tools v0.29.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
