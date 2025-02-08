@@ -6,8 +6,8 @@ github.com/obalunenko/getenv v1.12.0 h1:u8xWmCw2Lg2hCdjzgv88wWasWTf/iZVRsfoJj8W6
 github.com/obalunenko/getenv v1.12.0/go.mod h1:GtEy59H7644JXfVjxDFo1jEUe1yJ4asSyPwN8D19Pvs=
 github.com/obalunenko/logger v1.0.0 h1:I6LibEDJ7xkkHjd5LbC2auyQSt/tC4cFpfM7P/tJ2OA=
 github.com/obalunenko/logger v1.0.0/go.mod h1:BLGJLvxm4ImsjuGVOjrx59VUsbsLR2f7IkVPFjLyBvg=
-github.com/obalunenko/version v1.1.0 h1:yVua7OHnK3+MJpendeMmAlfzVmq7R1h8MO3Ufz7HEec=
-github.com/obalunenko/version v1.1.0/go.mod h1:Or267aCQxNcAtgOeWA7yOe/RqJS4XDaMfcFwk3ohbOg=
+github.com/obalunenko/version v1.2.0 h1:eUYme2w38fjzcvToInTGM85xAJycZHo65GvynbH8jCo=
+github.com/obalunenko/version v1.2.0/go.mod h1:kXnCfV2LUe+UHRrzjwPC/5lpnPbypwmLZh7BJx7wG1A=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
