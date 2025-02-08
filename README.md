@@ -38,12 +38,12 @@ The application responds with a JSON payload with the following structure:
 }
 ```
 
-It primarily runs on `localhost` port `8080` and acts upon `GET` requests to the `/pack` endpoint.
+It primarily runs on `localhost` port `8080` and acts upon `POST` requests to the `/pack` endpoint.
 
 Below is a Curl command snippet demonstrating how to call this endpoint
 
 ```bash
-curl --location --request GET 'localhost:8080/pack' \
+curl --location --request POST 'localhost:8080/pack' \
 --header 'Content-Type: application/json' \
 --data '{
     "items": 501
@@ -54,9 +54,9 @@ curl --location --request GET 'localhost:8080/pack' \
 
 The application can be configured using the following environment variables:
 
-    -`shipping-pack-optimizer_CONFIG_PATH` - path to the configuration file. Default value is empty.
+    -`SHIPPING_PACK_OPTIMIZER_CONFIG_PATH` - path to the configuration file. Default value is empty.
 
-If the `shipping-pack-optimizer_CONFIG_PATH` environment variable is not set, the application will use default configuration values.
+If the `SHIPPING_PACK_OPTIMIZER_CONFIG_PATH` environment variable is not set, the application will use default configuration values.
 
 The configuration file is a JSON file with the following structure:
 
