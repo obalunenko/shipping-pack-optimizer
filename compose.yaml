@@ -1,8 +1,11 @@
 services:
   server:
-    build:
-      context: .
-      target: final
+    image: ${APP_NAME}:latest
+    environment:
+        PORT: 8080
+        SHIPPING_PACK_OPTIMIZER_CONFIG_PATH: ${SHIPPING_PACK_OPTIMIZER_CONFIG_PATH:-/configs/config.yaml}
     ports:
       - 8080:8080
+    volumes:
+        - ./configs:/configs
 
