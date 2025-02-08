@@ -1,4 +1,4 @@
-APP_NAME := "shipping-pack-optimizer"
+APP_NAME := "server"
 
 format-code: fmt goimports
 .PHONY: format-code
