@@ -6,6 +6,9 @@ on:
       - 'v*'
     branches:
       - "!*"
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-server
 
 jobs:
   build:
@@ -68,6 +71,7 @@ jobs:
 
   bake-images:
     name: Build and push
+    needs: [ build, regression_test ]
     runs-on: 'ubuntu-24.04'
     permissions:
       contents: read
@@ -123,7 +127,7 @@ jobs:
           pull: true
 
   release:
-    needs: [ build, regression_test ]
+    needs: [ bake-images ]
     strategy:
       fail-fast: false
       max-parallel: 1
