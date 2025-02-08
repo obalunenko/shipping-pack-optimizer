@@ -1,7 +1,14 @@
 APP_NAME?=server
 SHELL := env APP_NAME=$(APP_NAME) $(SHELL)
 
-format-code: fmt goimports
+BIN_DIR?=$(CURDIR)/bin
+
+GOVERSION:=1.22
+
+TEST_DISCARD_LOG?=false
+SHELL := env TEST_DISCARD_LOG=$(TEST_DISCARD_LOG) $(SHELL)
+
+format-code: swagger-fmt fmt goimports
 .PHONY: format-code
 
 fmt:
@@ -26,7 +33,7 @@ test:
 	@echo "Done"
 .PHONY: test
 
-build:
+build: swagger-gen
 	@echo "Building..."
 	@./scripts/build/app.sh
 	@echo "Done"
@@ -46,11 +53,11 @@ vendor:
 
 docker-build:
 	@echo "Building docker image..."
-	@docker build -t $(APP_NAME):latest .
+	@docker build -t $(APP_NAME):latest -f Dockerfile .
 	@echo "Done"
 .PHONY: docker-build
 
-docker-run:
+docker-run: docker-build
 	@echo "Running docker image..."
 	@docker compose -f compose.yaml up
 	@echo "Done"
@@ -78,6 +85,22 @@ check-releaser:
 .PHONY: check-releaser
 
 ## Issue new release.
-new-version: vet test build
+new-version: vet test build docker-build
 	./scripts/release/new-version.sh
 .PHONY: new-release
+
+## Bump go version
+bump-go-version:
+	./scripts/bump-go.sh $(GOVERSION)
+.PHONY: bump-go-version
+
+## Generate swagger docs
+swagger-gen:
+	./scripts/swagger-docs.sh
+.PHONY: swagger-gen
+
+## Format swagger annotations
+swagger-fmt:
+	./scripts/style/swagger-fmt.sh
+.PHONY: swagger-fmt
+

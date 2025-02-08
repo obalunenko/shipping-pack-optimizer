@@ -9,29 +9,39 @@ import (
 	"os"
 	"os/signal"
 	"sync"
+	"syscall"
 
-	"github.com/obalunenko/getenv"
 	log "github.com/obalunenko/logger"
+	_ "github.com/swaggo/swag"
 
 	"github.com/obalunenko/shipping-pack-optimizer/internal/config"
 	"github.com/obalunenko/shipping-pack-optimizer/internal/packer"
 	"github.com/obalunenko/shipping-pack-optimizer/internal/service"
 )
 
-const (
-	configPathEnv = "SHIPPING_PACK_OPTIMIZER_CONFIG_PATH"
-)
-
 var errSignal = errors.New("received signal")
 
+// @title						Shipping Pack Optimizer API
+// @version					1.0
+// @description				This is a simple API for packing orders
+// @termsOfService				http://swagger.io/terms/
+// @contact.name				Oleg Balunenko
+// @contact.email				oleg.balunenko@gmail.com
+// @license.name				MIT
+// @license.url				https://opensource.org/license/mit
+// @host						localhost:8080
+// @schemes					http
+//
+// @externalDocs.description	OpenAPI
+// @externalDocs.url			https://swagger.io/resources/open-api/
 func main() {
-	printVersion()
-
 	signals := make(chan os.Signal, 1)
 
 	l := log.FromContext(context.Background())
 
 	ctx := log.ContextWithLogger(context.Background(), l)
+
+	printVersion(ctx)
 
 	ctx, cancel := context.WithCancelCause(ctx)
 	defer func() {
@@ -59,7 +69,7 @@ func main() {
 
 	defer cancel(nil)
 
-	signal.Notify(signals, os.Interrupt, os.Kill)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGKILL, syscall.SIGTERM)
 
 	go func() {
 		s := <-signals
@@ -67,32 +77,11 @@ func main() {
 		cancel(fmt.Errorf("%w: %s", errSignal, s.String()))
 	}()
 
-	var useDefaultConfig bool
-
-	cfgPath, err := getenv.Env[string](configPathEnv)
+	cfg, err := config.Load(ctx)
 	if err != nil {
-		if errors.Is(err, getenv.ErrNotSet) {
-			log.WithField(ctx, "env", configPathEnv).Warn("Config path env not set")
+		cancel(fmt.Errorf("failed to load config: %w", err))
 
-			useDefaultConfig = true
-		}
-	}
-
-	var cfg *config.Config
-
-	if !useDefaultConfig {
-		log.WithField(ctx, "path", cfgPath).Info("Using config")
-
-		cfg, err = config.Load(cfgPath)
-		if err != nil {
-			cancel(fmt.Errorf("failed to load config: %w", err))
-
-			return
-		}
-	} else {
-		log.Warn(ctx, "Using default config")
-
-		cfg = config.DefaultConfig()
+		return
 	}
 
 	l = log.Init(ctx, log.Params{
@@ -104,6 +93,7 @@ func main() {
 	ctx = log.ContextWithLogger(ctx, l)
 
 	port := cfg.HTTP.Port
+	host := cfg.HTTP.Host
 
 	p, err := packer.NewPacker(ctx, packer.WithBoxes(cfg.Pack.Boxes))
 	if err != nil {
@@ -112,10 +102,13 @@ func main() {
 		return
 	}
 
-	log.WithField(ctx, "port", port).Info("Starting server")
+	log.WithFields(ctx, log.Fields{
+		"host": host,
+		"port": port,
+	}).Info("Starting server")
 
 	server := &http.Server{
-		Addr:    net.JoinHostPort("", port),
+		Addr:    net.JoinHostPort(host, port),
 		Handler: service.NewRouter(p),
 	}
 

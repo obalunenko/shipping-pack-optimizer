@@ -1,9 +1,9 @@
 release:
   github:
     owner: obalunenko
-    name: orderpacker
+    name: shipping-pack-optimizer
   footer: |
-    **Full Changelog**: https://github.com/obalunenko/orderpacker/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/obalunenko/shipping-pack-optimizer/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 gomod:
   proxy: true
@@ -24,7 +24,7 @@ before:
 
 builds:
   - id: service
-    binary: orderpacker
+    binary: server
     goos:
       - linux
       - darwin
@@ -37,7 +37,7 @@ builds:
     mod_timestamp: '{{ .CommitTimestamp }}'
     env:
       - CGO_ENABLED=0
-    main: ./cmd/orderpacker
+    main: ./cmd/server
     flags:
       - -trimpath
     ldflags:
@@ -54,7 +54,7 @@ universal_binaries:
     # You will want to change this if you have multiple builds!
     #
     # Defaults to '{{ .ProjectName }}'
-    name_template: 'orderpacker'
+    name_template: 'server'
 
     # Whether to remove the previous single-arch binaries from the artifact list.
     # If left as false, your end release might have both several macOS archives: amd64, arm64 and all.

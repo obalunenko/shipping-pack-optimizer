@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.21
+ARG GO_VERSION=1.22
 FROM golang:${GO_VERSION}-alpine AS build
 WORKDIR /src
 
@@ -17,7 +17,7 @@ COPY . .
 
 RUN make build
 
-FROM alpine:3.18 AS final
+FROM alpine:3.19 AS final
 
 ARG APK_CA_CERTIFICATES_VERSION=~20241121
 
@@ -40,7 +40,13 @@ USER appuser
 COPY --from=build /src/bin/server /bin/
 
 
-EXPOSE 8080
+ENV PORT=8080
+EXPOSE ${PORT}
+
+ENV HOST="0.0.0.0"
+ENV LOG_LEVEL="info"
+ENV LOG_FORMAT="text"
+ENV PACK_BOXES=""
 
 
 ENTRYPOINT [ "/bin/server" ]

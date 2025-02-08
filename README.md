@@ -11,6 +11,18 @@ shipping-pack-optimizer is a Golang based application that calculates the number
 
 ## How does shipping-pack-optimizer work?
 
+### Frontend
+The shipping-pack-optimizer service also provides a user-friendly frontend, from which the aforementioned API can be conveniently accessed and tested. 
+You can reach the frontend from your browser at:
+
+`http://localhost:8080`
+
+The frontend itself is quite minimalistic - it contains an input field for submitting the number of items to be packed, 
+and upon submission, it presents neatly formatted API responses. 
+The responses are conveniently displayed, showing each pack and the corresponding quantity.
+
+### API
+
 The application exposes its functionality through an HTTP API and accepts a JSON payload with the following structure:
 
 ```json
@@ -38,12 +50,12 @@ The application responds with a JSON payload with the following structure:
 }
 ```
 
-It primarily runs on `localhost` port `8080` and acts upon `POST` requests to the `/pack` endpoint.
+It primarily runs on `localhost` port `8080` and acts upon `POST` requests to the `api/v1/pack` endpoint.
 
 Below is a Curl command snippet demonstrating how to call this endpoint
 
 ```bash
-curl --location --request POST 'localhost:8080/pack' \
+curl --location --request POST 'localhost:8080/api/v1/pack' \
 --header 'Content-Type: application/json' \
 --data '{
     "items": 501
@@ -52,55 +64,24 @@ curl --location --request POST 'localhost:8080/pack' \
 
 ## Configuration
 
-The application can be configured using the following environment variables:
+Application follows the [12-factor app](https://12factor.net/) methodology and can be configured using environment variables.
 
-    -`SHIPPING_PACK_OPTIMIZER_CONFIG_PATH` - path to the configuration file. Default value is empty.
+Following environment variables are supported:
 
-If the `SHIPPING_PACK_OPTIMIZER_CONFIG_PATH` environment variable is not set, the application will use default configuration values.
-
-The configuration file is a JSON file with the following structure:
-
-```json
-{
-  "http": {
-    "port": "8080"
-  },
-  "pack": {
-    "boxes": [
-      1,2,4,8,16,32
-    ]
-  },
-  "log": {
-    "level": "info",
-    "format": "json"
-  }
-}
-```
-
-YAML configuration file is also supported.
-
-```yaml 
-http:
-  port: 8080
-log:
-  level: info
-  format: json
-pack:
-  boxes:
-    - 1
-    - 2
-    - 4
-    - 8
-    - 16
-    - 32
-```
+| Name         | Description                                                          | Default value             |
+|--------------|----------------------------------------------------------------------|---------------------------|
+| `PORT`       | The port on which the application will listen for incoming requests. | `8080`                    |
+| `HOST`       | The host on which the application will listen for incoming requests. | `0.0.0.0`                 |
+| `LOG_LEVEL`  | The log level of the application.                                    | `info`                    |
+| `LOG_FORMAT` | The log format of the application.                                   | `text`                    |
+| `PACK_BOXES` | The pack boxes for packing orders. Values should be separated by `,` | `250,500,1000,2000,5000,` |
 
 
 ## Development
 
 ### Prerequisites
 
-- [Go](https://golang.org/doc/install) 1.21 or higher
+- [Go](https://golang.org/doc/install) 1.22 or higher
 - [Docker](https://docs.docker.com/get-docker/) 24.0 or higher
 - [Docker Compose](https://docs.docker.com/compose/install/) 2.21 or higher
 
@@ -124,6 +105,12 @@ To run the tests, use the following command:
 
 ```bash
 make test
+```
+
+To run tests without logs, use the following command:
+
+```bash
+make TEST_DISCARD_LOG=true test
 ```
 
 ### Linting
