@@ -1,10 +1,11 @@
 module github.com/obalunenko/shipping-pack-optimizer
 
 go 1.22
+toolchain go1.23.6
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/obalunenko/getenv v1.13.0
+	github.com/obalunenko/getenv v1.14.0
 	github.com/obalunenko/logger v1.1.0
 	github.com/obalunenko/version v1.2.0
 	github.com/stretchr/testify v1.9.0
