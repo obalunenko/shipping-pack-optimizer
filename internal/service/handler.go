@@ -140,8 +140,6 @@ func packHandler(p *packer.Packer) http.HandlerFunc {
 
 		resp := toAPIResponse(order)
 
-		w.Header().Set("Content-Type", "application/json")
-
 		makeResponse(r.Context(), w, http.StatusOK, resp, nil)
 	}
 }
