@@ -68,33 +68,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5.6.1
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          # Docker tags based on the following events/attributes
-          tags: |
-            type=schedule
-            type=ref,event=branch
-            type=semver,pattern={{raw}}
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
-
-      - name: Build and push Docker images
-        uses: docker/bake-action@v6.3.0
-        env:
-          TAGS: ${{ steps.meta.outputs.bake-file-tags }}
-          LABELS: ${{ steps.meta.outputs.bake-file-labels }}
-          ANNOTATIONS: ${{ steps.meta.outputs.bake-file-annotations }}
-        with:
-          files: |
-            ./docker-bake.hcl
-            cwd://${{ env.TAGS }}
-            cwd://${{ env.LABELS }}
-            cwd://${{ env.ANNOTATIONS }}
-          push: ${{ github.event_name != 'pull_request' }}
-          pull: true
-    
+      - name: Build
+        run: |
+          make docker-build
