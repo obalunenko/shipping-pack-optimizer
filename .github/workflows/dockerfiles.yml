@@ -15,10 +15,6 @@ on:
       - "!build/docker/**.sh"
       - ".github/workflows/dockerfiles.yml"
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}-server
-
 jobs:
   lint-dockerfiles:
     strategy:
@@ -60,13 +56,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3.3.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: |

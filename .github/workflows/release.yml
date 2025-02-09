@@ -6,9 +6,6 @@ on:
       - 'v*'
     branches:
       - "!*"
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}-server
 
 jobs:
   build:
@@ -67,7 +64,6 @@ jobs:
         run: |
           make test
         shell: bash
-
 
   release:
     needs: [ build, regression_test ]
