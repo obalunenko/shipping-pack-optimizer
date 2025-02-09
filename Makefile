@@ -6,6 +6,16 @@ SHELL := env IMAGE_NAME=$(IMAGE_NAME) $(SHELL)
 
 BIN_DIR?=$(CURDIR)/bin
 
+
+COMMIT_MAKE?=$(shell git rev-parse HEAD)
+SHELL := env COMMIT_MAKE=$(COMMIT_MAKE) $(SHELL)
+SHORTCOMMIT_MAKE?=$(shell git rev-parse --short HEAD)
+SHELL := env SHORTCOMMIT_MAKE=$(SHORTCOMMIT_MAKE) $(SHELL)
+DATE_MAKE?=$(shell date -u +%Y-%m-%dT%H:%M:%SZ)
+SHELL := env DATE_MAKE=$(DATE_MAKE) $(SHELL)
+VERSION_MAKE?=$(shell git tag | sort -V | tail -1)
+SHELL := env VERSION_MAKE=$(VERSION_MAKE) $(SHELL)
+
 GOVERSION:=1.23
 
 TEST_DISCARD_LOG?=false
