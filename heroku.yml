@@ -1,7 +1,0 @@
-build:
-  docker:
-    service: Dockerfile
-
-run:
-  web:
-    image: service

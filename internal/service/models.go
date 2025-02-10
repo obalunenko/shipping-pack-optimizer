@@ -23,15 +23,15 @@ type PackResponse struct {
 	Packs []Pack `json:"packs,omitempty"`
 }
 
-// HTTPError represents an HTTP error.
-type HTTPError interface {
+// httpError represents an HTTP error.
+type httpError interface {
 	// StatusCode returns the status code of the error.
 	StatusCode() int
 	// Message returns the message of the error.
 	Message() string
 }
 
-func newHTTPError(ctx context.Context, code int, msg string) HTTPError {
+func newHTTPError(ctx context.Context, code int, msg string) httpError {
 	switch code {
 	case http.StatusBadRequest:
 		return newBadRequestError(msg)
@@ -45,7 +45,7 @@ func newHTTPError(ctx context.Context, code int, msg string) HTTPError {
 		return newInternalServerError(msg)
 	}
 }
-func newBadRequestError(msg string) HTTPError {
+func newBadRequestError(msg string) httpError {
 	return badRequestError{
 		Code: http.StatusBadRequest,
 		Msg:  msg,
@@ -70,7 +70,7 @@ type internalServerError struct {
 	Msg  string `json:"message" example:"Internal server error"`
 }
 
-func newInternalServerError(msg string) HTTPError {
+func newInternalServerError(msg string) httpError {
 	return internalServerError{
 		Code: http.StatusInternalServerError,
 		Msg:  msg,
@@ -90,7 +90,7 @@ type methodNotAllowedError struct {
 	Msg  string `json:"message" example:"Method not allowed"`
 }
 
-func newMethodNotAllowedError(msg string) HTTPError {
+func newMethodNotAllowedError(msg string) httpError {
 	return methodNotAllowedError{
 		Code: http.StatusMethodNotAllowed,
 		Msg:  msg,

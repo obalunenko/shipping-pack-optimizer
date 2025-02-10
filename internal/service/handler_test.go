@@ -10,6 +10,7 @@ func Test_toAPIResponse(t *testing.T) {
 	type args struct {
 		boxes map[uint]uint
 	}
+
 	tests := []struct {
 		name string
 		args args
@@ -53,6 +54,7 @@ func Test_toAPIResponse(t *testing.T) {
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := toAPIResponse(tt.args.boxes)

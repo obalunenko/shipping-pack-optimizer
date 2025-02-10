@@ -1,9 +1,13 @@
 package service
 
 import (
+	"errors"
 	"maps"
 	"sort"
 )
+
+// ErrEmptyItems is returned when items is zero or empty.
+var ErrEmptyItems = errors.New("empty items")
 
 func fromAPIRequest(req PackRequest) (uint, error) {
 	if req.Items == 0 {

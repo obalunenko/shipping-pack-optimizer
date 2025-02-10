@@ -107,13 +107,13 @@ func (rw *responseWriter) WriteHeader(status int) {
 
 func recoverMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
+		defer func(ctx context.Context) {
 			if err := recover(); err != nil {
-				log.WithField(r.Context(), "error", err).Error("Panic recovered")
+				log.WithField(ctx, "error", err).Error("Panic recovered")
 
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}
-		}()
+		}(r.Context())
 
 		next.ServeHTTP(w, r)
 	})

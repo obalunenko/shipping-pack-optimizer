@@ -12,12 +12,14 @@ type Packer struct {
 	boxes []uint
 }
 
-var DefaultBoxes = []uint{
-	250,
-	500,
-	1000,
-	2000,
-	5000,
+func DefaultBoxes() []uint {
+	return []uint{
+		250,
+		500,
+		1000,
+		2000,
+		5000,
+	}
 }
 
 type Option func(*Packer)
@@ -52,7 +54,7 @@ func WithBoxes(boxes []uint) Option {
 
 func WithDefaultBoxes() Option {
 	return func(p *Packer) {
-		p.boxes = DefaultBoxes
+		p.boxes = DefaultBoxes()
 	}
 }
 
@@ -89,7 +91,6 @@ func (p Packer) validate() error {
 	}
 
 	return nil
-
 }
 
 func (p Packer) PackOrder(ctx context.Context, items uint) map[uint]uint {
@@ -98,30 +99,44 @@ func (p Packer) PackOrder(ctx context.Context, items uint) map[uint]uint {
 		"boxes": p.boxes,
 	}).Debug("Packing order")
 
+	result := packOrder(items, p.boxes)
+
+	log.WithFields(ctx, log.Fields{
+		"items":  items,
+		"boxes":  p.boxes,
+		"result": fmt.Sprintf("%v", result),
+	}).Debug("Packing order complete")
+
+	return result
+}
+
+// packOrder uses greedy algorithm to pack order items in boxes.
+func packOrder(items uint, boxes []uint) map[uint]uint {
+	if len(boxes) == 0 {
+		panic("boxes list is empty")
+	}
+
+	if boxes[0] == 0 {
+		// This should never happen, cause we validate boxes on creation.
+		panic(fmt.Errorf("packer has box with zero volume: boxes [%v]", boxes))
+	}
+
 	if items == 0 {
 		return nil
 	}
 
-	if p.boxes[0] == 0 {
-		// This should never happen, cause we validate boxes on creation.
-		panic(fmt.Errorf("packer has box with zero volume: boxes [%v]", p.boxes))
-	}
-
 	// Preallocate memory for the result slice.
 	// Make a prediction based on the number of items and the smallest box.
-	result := make(map[uint]uint, len(p.boxes))
+	result := make(map[uint]uint, len(boxes))
 
-	if len(p.boxes) == 1 {
-		box := p.boxes[0]
+	// If we have only one box size - pack al items in one size.
+	if len(boxes) == 1 {
+		box := boxes[0]
 
-		if items < box {
-			result[box]++
-
-			return result
-		}
-
+		// Found number of boxes needed to pack items.
 		n := items / box
 
+		// If we have leftovers - add additional box.
 		last := items % box
 		if last != 0 {
 			n++
@@ -132,9 +147,10 @@ func (p Packer) PackOrder(ctx context.Context, items uint) map[uint]uint {
 		return result
 	}
 
-	for i := len(p.boxes) - 1; i >= 0; i-- {
-		box := p.boxes[i]
+	for i := len(boxes) - 1; i >= 0; i-- {
+		box := boxes[i]
 
+		// That means that we found either last box and packed all items or our box is not optimal size.
 		if box >= items {
 			if i == 0 {
 				result[box]++
@@ -145,30 +161,25 @@ func (p Packer) PackOrder(ctx context.Context, items uint) map[uint]uint {
 			continue
 		}
 
+		// That mens that box either not propper size and we should use previous or we're out of items.
 		if box < items {
 			if i == 0 {
-				result[p.boxes[i+1]]++
+				// The current box is to small - use previous size.
+				result[boxes[i+1]]++
 
 				break
 			}
 
 			n := items / box
 
-			if n == 0 {
-				result[box]++
-
-				break
-			}
-
 			result[box] += n
 
-			left := items % box
+			// Decrease leftover items to pack.
+			items -= box * n
 
-			if left == 0 {
+			if items == 0 {
 				break
 			}
-
-			items = left
 		}
 	}
 
