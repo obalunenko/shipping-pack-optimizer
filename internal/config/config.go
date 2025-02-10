@@ -46,7 +46,7 @@ func DefaultConfig() *Config {
 			Host: "0.0.0.0",
 		},
 		Pack: packConfig{
-			Boxes: packer.DefaultBoxes,
+			Boxes: packer.DefaultBoxes(),
 		},
 		Log: logConfig{
 			Level:  "INFO",

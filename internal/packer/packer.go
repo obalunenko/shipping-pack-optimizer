@@ -12,12 +12,14 @@ type Packer struct {
 	boxes []uint
 }
 
-var DefaultBoxes = []uint{
-	250,
-	500,
-	1000,
-	2000,
-	5000,
+func DefaultBoxes() []uint {
+	return []uint{
+		250,
+		500,
+		1000,
+		2000,
+		5000,
+	}
 }
 
 type Option func(*Packer)
@@ -52,7 +54,7 @@ func WithBoxes(boxes []uint) Option {
 
 func WithDefaultBoxes() Option {
 	return func(p *Packer) {
-		p.boxes = DefaultBoxes
+		p.boxes = DefaultBoxes()
 	}
 }
 
@@ -89,7 +91,6 @@ func (p Packer) validate() error {
 	}
 
 	return nil
-
 }
 
 func (p Packer) PackOrder(ctx context.Context, items uint) map[uint]uint {

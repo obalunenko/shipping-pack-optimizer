@@ -11,14 +11,17 @@ import (
 
 	log "github.com/obalunenko/logger"
 
-	"github.com/obalunenko/shipping-pack-optimizer/internal/packer"
 	"github.com/obalunenko/shipping-pack-optimizer/internal/service/assets"
 )
 
 // ErrEmptyItems is returned when items is zero or empty.
 var ErrEmptyItems = errors.New("empty items")
 
-func NewRouter(p *packer.Packer) *http.ServeMux {
+type Packer interface {
+	PackOrder(ctx context.Context, items uint) map[uint]uint
+}
+
+func NewRouter(p Packer) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	mw := []func(http.Handler) http.Handler{
@@ -51,7 +54,7 @@ func indexHandler() http.HandlerFunc {
 	homePageHTML := string(assets.MustLoad("index.gohtml"))
 	homePageTmpl := template.Must(template.New("index").Parse(homePageHTML))
 
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
 
 		if err := homePageTmpl.Execute(w, nil); err != nil {
@@ -63,7 +66,7 @@ func indexHandler() http.HandlerFunc {
 }
 
 func faviconHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 	}
 }
@@ -82,7 +85,7 @@ func faviconHandler() http.HandlerFunc {
 //	@Failure		405		{object}	methodNotAllowedError	"Method not allowed"
 //	@Failure		500		{object}	internalServerError		"Internal server error"
 //	@Router			/api/v1/pack [post]
-func packHandler(p *packer.Packer) http.HandlerFunc {
+func packHandler(p Packer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			makeResponse(

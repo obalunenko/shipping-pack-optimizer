@@ -19,6 +19,10 @@ fmt:
 	./scripts/style/fmt.sh
 .PHONY: fmt
 
+lint:
+	@golangci-lint version && golangci-lint run -v --sort-results --max-issues-per-linter=0 --max-same-issues=0 ./...
+.PHONY: lint
+
 goimports:
 	@echo "Formatting code..."
 	./scripts/style/fix-imports.sh

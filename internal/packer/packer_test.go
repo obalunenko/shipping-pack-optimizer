@@ -31,7 +31,7 @@ func TestPacker_PackOrder(t *testing.T) {
 		{
 			name: "default. 1 - 1x250",
 			fields: fields{
-				boxes: DefaultBoxes,
+				boxes: DefaultBoxes(),
 			},
 			args: args{
 				items: 1,
@@ -43,7 +43,7 @@ func TestPacker_PackOrder(t *testing.T) {
 		{
 			name: "default. 251 - 1x500",
 			fields: fields{
-				boxes: DefaultBoxes,
+				boxes: DefaultBoxes(),
 			},
 			args: args{
 				items: 251,
@@ -55,7 +55,7 @@ func TestPacker_PackOrder(t *testing.T) {
 		{
 			name: "default. 501 - 1x500, 1x250",
 			fields: fields{
-				boxes: DefaultBoxes,
+				boxes: DefaultBoxes(),
 			},
 			args: args{
 				items: 501,
@@ -68,7 +68,7 @@ func TestPacker_PackOrder(t *testing.T) {
 		{
 			name: "default. 12001  - 2x5000, 1x2000, 1x250",
 			fields: fields{
-				boxes: DefaultBoxes,
+				boxes: DefaultBoxes(),
 			},
 			args: args{
 				items: 12001,
@@ -82,7 +82,7 @@ func TestPacker_PackOrder(t *testing.T) {
 		{
 			name: "default. 29292929292929  - ?",
 			fields: fields{
-				boxes: DefaultBoxes,
+				boxes: DefaultBoxes(),
 			},
 			args: args{
 				items: 29292929292929,
@@ -134,6 +134,20 @@ func TestPacker_PackOrder(t *testing.T) {
 				1: 1,
 			},
 		},
+		{
+			name: "custom edge cases[23, 31, 53]. 500_000 -23: 2, 31: 7, 53: 9429",
+			fields: fields{
+				boxes: []uint{23, 31, 53},
+			},
+			args: args{
+				items: 500_000,
+			},
+			want: map[uint]uint{
+				53: 9429,
+				31: 7,
+				23: 2,
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -149,6 +163,8 @@ func TestPacker_PackOrder(t *testing.T) {
 }
 
 func compareMaps(t *testing.T, expected, actual map[uint]uint) {
+	t.Helper()
+
 	bexp, err := json.Marshal(expected)
 	require.NoError(t, err)
 
@@ -177,7 +193,7 @@ func TestNewPacker(t *testing.T) {
 				opts: []Option{},
 			},
 			want: &Packer{
-				boxes: DefaultBoxes,
+				boxes: DefaultBoxes(),
 			},
 			wantErr: assert.NoError,
 		},

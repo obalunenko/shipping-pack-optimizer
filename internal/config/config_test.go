@@ -70,7 +70,7 @@ func TestLoadDefault(t *testing.T) {
 			t.Setenv(boxesEnv, "sssd212")
 
 			cfg, err := Load(ctx)
-			assert.Error(t, err)
+			require.Error(t, err)
 
 			assert.Nil(t, cfg)
 		})
