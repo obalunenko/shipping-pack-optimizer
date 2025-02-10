@@ -102,11 +102,6 @@ func main() {
 		return
 	}
 
-	log.WithFields(ctx, log.Fields{
-		"host": host,
-		"port": port,
-	}).Info("Starting server")
-
 	server := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
 		Handler: service.NewRouter(p),
