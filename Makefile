@@ -64,6 +64,12 @@ docker-build: vendor
 	@echo "Done"
 .PHONY: docker-build
 
+docker-build-push: vendor
+	@echo "Building docker image..."
+	@IMAGE_DESCRIPTION="$$(cat README.md)" docker buildx bake --push
+	@echo "Done"
+.PHONY: docker-build-push
+
 docker-run: docker-build
 	@echo "Running docker image..."
 	@docker compose -f ./deployments/compose/compose.yaml up
