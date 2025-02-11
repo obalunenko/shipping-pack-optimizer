@@ -5,7 +5,7 @@ group "default" {
 }
 
 variable "REGISTRY" {
-    default = "ghcr.io"
+    default = ""
 }
 
 variable "IMAGE_NAME" {
@@ -37,7 +37,7 @@ variable "IMAGE_TAG" {
 }
 
 variable "BUILD_TAG" {
-    default = notequal("-", IMAGE_TAG) ? "${IMAGE_NAME}:${IMAGE_TAG}" : "${IMAGE_NAME}:latest"
+    default = notequal("-", IMAGE_TAG) ? "${IMAGE_WITH_REGISTRY}:${IMAGE_TAG}" : "${IMAGE_WITH_REGISTRY}:latest"
 }
 
 variable "IMAGE_DESCRIPTION" {

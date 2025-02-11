@@ -19,7 +19,7 @@ fmt:
 	./scripts/style/fmt.sh
 .PHONY: fmt
 
-lint:
+lint: vendor
 	@golangci-lint version && golangci-lint run -v --sort-results --max-issues-per-linter=0 --max-same-issues=0 ./...
 .PHONY: lint
 
@@ -58,13 +58,13 @@ vendor:
 	@echo "Done"
 .PHONY: vendor
 
-docker-build: vendor
+docker-build:
 	@echo "Building docker image..."
 	@IMAGE_DESCRIPTION="$$(cat README.md)" docker buildx bake
 	@echo "Done"
 .PHONY: docker-build
 
-docker-build-push: vendor
+docker-build-push:
 	@echo "Building docker image..."
 	@IMAGE_DESCRIPTION="$$(cat README.md)" docker buildx bake --push
 	@echo "Done"
@@ -121,7 +121,4 @@ swagger-fmt:
 copy_env:
 	@cp .env.example .env
 .PHONY: copy_env
-
-
-
 
