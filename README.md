@@ -76,6 +76,23 @@ Following environment variables are supported:
 | `LOG_FORMAT` | The log format of the application.                                   | `text`                   |
 | `PACK_BOXES` | The pack boxes for packing orders. Values should be separated by `,` | `250,500,1000,2000,5000` |
 
+## Run the service
+
+The easiest way is to run it via docker:
+
+```bash
+docker run -p8080:8080 -P ghcr.io/obalunenko/shipping-pack-optimizer-server:latest
+```
+
+Then open in browser http://localhost:8080 to test application
+
+### Run with custom configs
+
+Create .env file (you can use .env.example as template) or create on your own, using variables from Configuration section
+
+```bash
+docker run -p8080:8080 -P --env-file ./.env ghcr.io/obalunenko/shipping-pack-optimizer-server:latest
+```
 
 ## Development
 
