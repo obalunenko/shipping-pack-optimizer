@@ -5,6 +5,23 @@
 
 # shipping-pack-optimizer Service
 
+## Table of Contents
+
+- [What is shipping-pack-optimizer?](#what-is-shipping-pack-optimizer)
+- [How does shipping-pack-optimizer work?](#how-does-shipping-pack-optimizer-work)
+  - [Frontend](#frontend)
+  - [API](#api)
+- [Configuration](#configuration)
+- [Run the service](#run-the-service)
+  - [Run with custom configs](#run-with-custom-configs)
+- [Development](#development)
+  - [Prerequisites](#prerequisites)
+  - [Running the application](#running-the-application)
+  - [Running tests](#running-tests)
+  - [Linting](#linting)
+  - [Code formatting](#code-formatting)
+  - [Vendoring](#vendoring)
+
 ## What is shipping-pack-optimizer?
 
 shipping-pack-optimizer is a Golang based application that calculates the number of packs needed to ship to a customer.
@@ -78,80 +95,4 @@ Following environment variables are supported:
 
 ## Run the service
 
-All available docker image versions can be found here: https://github.com/obalunenko/shipping-pack-optimizer/pkgs/container/shipping-pack-optimizer-server
-
-The easiest way is to run it via docker:
-
-```bash
-docker run -p8080:8080 -P ghcr.io/obalunenko/shipping-pack-optimizer-server:latest
-```
-
-Then open in browser http://localhost:8080 to test application
-
-### Run with custom configs
-
-Create .env file (you can use .env.example as template) or create on your own, using variables from Configuration section
-
-```bash
-docker run -p8080:8080 -P --env-file ./.env ghcr.io/obalunenko/shipping-pack-optimizer-server:latest
-```
-
-## Development
-
-### Prerequisites
-
-- [Go](https://golang.org/doc/install) 1.23 or higher
-- [Docker](https://docs.docker.com/get-docker/) 27.0 or higher
-- [Docker Compose](https://docs.docker.com/compose/install/) 2.31 or higher
-
-### Running the application
-
-For development purposes, the application can be run locally using the following command:
-
-```bash
-make build && make run
-```
-
-To build and run the application in a Docker container, use the following command:
-
-```bash
-make docker-build && make docker-run
-```
-
-### Running tests
-
-To run the tests, use the following command:
-
-```bash
-make test
-```
-
-To run tests without logs, use the following command:
-
-```bash
-TEST_DISCARD_LOG=true make test
-```
-
-### Linting
-
-To run the linter, use the following command:
-
-```bash
-make vet
-```
-
-### Code formatting
-
-To format the code, use the following command:
-
-```bash
-make format-code
-```
-
-### Vendoring
-
-To vendor the dependencies, use the following command:
-
-```bash
-make vendor
-```
+All available docker image versions can be found here: https://github.com/obalunenko/shipping-pack-optimizer/pkgs
