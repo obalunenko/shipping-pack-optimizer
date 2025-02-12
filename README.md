@@ -78,6 +78,8 @@ Following environment variables are supported:
 
 ## Run the service
 
+All available docker image versions can be found here: https://github.com/obalunenko/shipping-pack-optimizer/pkgs/container/shipping-pack-optimizer-server
+
 The easiest way is to run it via docker:
 
 ```bash
