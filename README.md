@@ -34,9 +34,14 @@ You can reach the frontend from your browser at:
 
 `http://localhost:8080`
 
-The frontend itself is quite minimalistic - it contains an input field for submitting the number of items to be packed, 
-and upon submission, it presents neatly formatted API responses. 
+The frontend itself is quite minimalistic - it contains an input field for submitting the number of items to be packed.
+
+![input_form](./docs/demo/input.png)
+
+And upon submission, it presents neatly formatted API responses. 
 The responses are conveniently displayed, showing each pack and the corresponding quantity.
+
+![packed_order](./docs/demo/packed.png)
 
 ### API
 
