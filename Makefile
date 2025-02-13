@@ -6,12 +6,12 @@ SHELL := env IMAGE_NAME=$(IMAGE_NAME) $(SHELL)
 
 BIN_DIR?=$(CURDIR)/bin
 
-GOVERSION:=1.23
+GOVERSION:=1.24
 
 TEST_DISCARD_LOG?=false
 SHELL := env TEST_DISCARD_LOG=$(TEST_DISCARD_LOG) $(SHELL)
 
-format-code: swagger-fmt fmt goimports
+format-code: install-tools swagger-fmt fmt goimports
 .PHONY: format-code
 
 fmt:
@@ -23,7 +23,7 @@ lint: vendor
 	@golangci-lint version && golangci-lint run -v --sort-results --max-issues-per-linter=0 --max-same-issues=0 ./...
 .PHONY: lint
 
-goimports:
+goimports: install-tools
 	@echo "Formatting code..."
 	./scripts/style/fix-imports.sh
 .PHONY: goimports
@@ -82,6 +82,10 @@ docker-stop:
 	@echo "Done"
 .PHONY: docker-stop
 
+install-tools:
+	@go install tool
+.PHONY:install-tools
+
 ## Release
 release:
 	./scripts/release/release.sh
@@ -108,12 +112,12 @@ bump-go-version:
 .PHONY: bump-go-version
 
 ## Generate swagger docs
-swagger-gen:
-	./scripts/swagger-docs.sh
+swagger-gen: install-tools
+	./scripts/swagger-docs.shf
 .PHONY: swagger-gen
 
 ## Format swagger annotations
-swagger-fmt:
+swagger-fmt: install-tools
 	./scripts/style/swagger-fmt.sh
 .PHONY: swagger-fmt
 

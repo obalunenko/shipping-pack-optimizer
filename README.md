@@ -127,9 +127,9 @@ from [Configuration](#configuration) section
 
 ### Prerequisites
 
-- [Go](https://golang.org/doc/install) 1.23 or higher
-- [Docker](https://docs.docker.com/get-docker/) 27.0 or higher
-- [Docker Compose](https://docs.docker.com/compose/install/) 2.31 or higher
+- [Go](https://golang.org/doc/install) 1.24 or higher
+- [Docker](https://docs.docker.com/get-docker/) 27.5 or higher
+- [Docker Compose](https://docs.docker.com/compose/install/) 2.32 or higher
 
 ### Running the application
 
