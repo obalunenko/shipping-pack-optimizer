@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/obalunenko/getenv v1.14.0
 	github.com/obalunenko/logger v1.2.0
-	github.com/obalunenko/version v1.3.0
+	github.com/obalunenko/version v1.3.1
 	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/swag v1.16.4
 )
