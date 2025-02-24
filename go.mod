@@ -4,6 +4,11 @@ go 1.24
 
 toolchain go1.24.0
 
+tool (
+	github.com/swaggo/swag/cmd/swag
+	golang.org/x/tools/cmd/goimports
+)
+
 require (
 	github.com/google/uuid v1.6.0
 	github.com/obalunenko/getenv v1.14.0
@@ -35,9 +40,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
-)
-
-tool (
-	github.com/swaggo/swag/cmd/swag
-	golang.org/x/tools/cmd/goimports
 )
