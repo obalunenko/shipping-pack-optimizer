@@ -2,7 +2,6 @@ package packer
 
 import (
 	"context"
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -158,21 +157,9 @@ func TestPacker_PackOrder(t *testing.T) {
 
 			got := p.PackOrder(ctx, tt.args.items)
 
-			compareMaps(t, tt.want, got)
+			assert.EqualValues(t, tt.want, got)
 		})
 	}
-}
-
-func compareMaps(t *testing.T, expected, actual map[uint]uint) {
-	t.Helper()
-
-	bexp, err := json.Marshal(expected)
-	require.NoError(t, err)
-
-	bact, err := json.Marshal(actual)
-	require.NoError(t, err)
-
-	assert.Equal(t, string(bexp), string(bact))
 }
 
 func TestNewPacker(t *testing.T) {
@@ -239,7 +226,7 @@ func TestNewPacker(t *testing.T) {
 				return
 			}
 
-			assert.Equal(t, tt.want, got)
+			assert.EqualValues(t, tt.want, got)
 		})
 	}
 }
