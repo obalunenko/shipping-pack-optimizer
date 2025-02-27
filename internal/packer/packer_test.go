@@ -133,7 +133,6 @@ func TestPacker_PackOrder(t *testing.T) {
 				1: 1,
 			},
 		},
-		// TODO: Fix this edge case, when have a time. Maybe Dijkstra's algorithm?
 		{
 			name: "custom edge cases[23, 31, 53]. 500_000 -23: 2, 31: 7, 53: 9429",
 			fields: fields{
