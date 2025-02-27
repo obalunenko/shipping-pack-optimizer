@@ -11,7 +11,7 @@ tool (
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/obalunenko/getenv v1.14.0
+	github.com/obalunenko/getenv v1.14.1
 	github.com/obalunenko/logger v1.2.0
 	github.com/obalunenko/version v1.3.1
 	github.com/stretchr/testify v1.10.0
@@ -32,7 +32,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/urfave/cli/v2 v2.3.0 // indirect
-	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c // indirect
+	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
