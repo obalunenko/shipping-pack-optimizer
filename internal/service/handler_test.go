@@ -59,7 +59,7 @@ func Test_toAPIResponse(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := toAPIResponse(tt.args.boxes)
 
-			assert.Equal(t, tt.want, got)
+			assert.EqualValues(t, tt.want, got)
 		})
 	}
 }
