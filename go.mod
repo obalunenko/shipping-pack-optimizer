@@ -10,7 +10,7 @@ require (
 	github.com/obalunenko/logger v1.2.0
 	github.com/obalunenko/version v1.3.1
 	github.com/stretchr/testify v1.10.0
-	github.com/swaggo/swag v1.16.4
+	github.com/swaggo/swag v1.16.5
 )
 
 require (
@@ -30,7 +30,7 @@ require (
 	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools v0.30.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
