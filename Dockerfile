@@ -18,7 +18,7 @@ RUN make build
 
 FROM alpine:3.22 AS final
 
-ARG APK_CA_CERTIFICATES_VERSION=~2025
+ARG APK_CA_CERTIFICATES_VERSION=~20250619
 
 RUN apk add --no-cache \
         "ca-certificates=${APK_CA_CERTIFICATES_VERSION}"
