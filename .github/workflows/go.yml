@@ -26,6 +26,10 @@ on:
       - '!**.*md'
       - '.github/workflows/**'
 
+env:
+  TEST_DISCARD_LOG: true
+
+
 jobs:
   build:
     strategy:
